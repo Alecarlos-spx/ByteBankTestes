@@ -6,18 +6,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Alura.ByteBank.Infraestrura.Testes
 {
     public class AgenciaRepositorioTestes
     {
         private readonly IAgenciaRepositorio _repositorio;
-        public AgenciaRepositorioTestes()
+        public ITestOutputHelper SaidaConsoleTeste { get; set; }
+        public AgenciaRepositorioTestes(ITestOutputHelper _saidaConsoleTeste)
         {
+            SaidaConsoleTeste = _saidaConsoleTeste;
+            SaidaConsoleTeste.WriteLine("Construtor executado com sucesso!");
+
             var servico = new ServiceCollection();
             servico.AddTransient<IAgenciaRepositorio, AgenciaRepositorio>();
             var provedor = servico.BuildServiceProvider();
@@ -120,7 +122,7 @@ namespace Alura.ByteBank.Infraestrura.Testes
 
             var repositorioMock = new ByteBankRepositorio();
 
-            //Act
+            //Actcurs
             var adicionado = repositorioMock.AdicionarAgencia(agencia);
 
             //Assert
@@ -139,9 +141,11 @@ namespace Alura.ByteBank.Infraestrura.Testes
 
             //Assert
             bytebankRepositorioMock.Verify(b => b.BuscarAgencias());
+        }
 
-
-
+        public void Dispose()
+        {
+            SaidaConsoleTeste.WriteLine("Destrutor invocado.");
         }
     }
 }
